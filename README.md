@@ -1,101 +1,84 @@
-# Orderly Broker UI Template
+# Orderly DEX Template
 
-This template provides a quick way to set up a customized trading UI for Orderly Network brokers, built with Remix and deployable on Vercel.
-
-🔗 [Live Demo](https://broker-template-seven.vercel.app/)
+A white-label perpetual futures DEX frontend built on the [Orderly Network](https://orderly.network) SDK. Fork this repo, edit `.env`, and deploy your own branded trading UI.
 
 ## Quick Start
 
-1. **Fork the Repository**
-   
-   Fork this repository to your GitHub account to create your broker's UI.
-
-2. **Clone Your Fork**
-
-```sh
-git clone https://github.com/YOUR_USERNAME/broker-template.git
-cd broker-template
-```
-
-3. **Install Dependencies**
+1. Fork this repo
+2. Edit `.env` — every variable is self-documented with inline comments
+3. Install and run:
 
 ```sh
 yarn install
+yarn dev        # http://localhost:5173
 ```
 
-## Configuration Steps
+## Configuration
 
-### 1. Broker Configuration
+**All configuration lives in `.env`.** Open it — every variable has comments explaining what it does, valid values, and defaults. There's no separate config file to hunt for.
 
-Edit the `.env` file to set up your broker details:
+Key things to set:
 
-```env
-# Broker settings
-VITE_ORDERLY_BROKER_ID=your_broker_id
-VITE_ORDERLY_BROKER_NAME=Your Broker Name
-VITE_ORDERLY_NETWORK_ID=mainnet  # or testnet for testing
+| Variable | Purpose |
+|----------|---------|
+| `VITE_ORDERLY_BROKER_ID` | Your Orderly broker ID (use `"demo"` for sandbox) |
+| `VITE_ORDERLY_BROKER_NAME` | Display name shown throughout the UI |
+| `VITE_APP_NAME` | Browser tab title and PWA name |
+| `VITE_WALLETCONNECT_PROJECT_ID` | Get one at [cloud.walletconnect.com](https://cloud.walletconnect.com) |
 
-# Meta tags
-VITE_APP_NAME=Your App Name
-VITE_APP_DESCRIPTION=Your app description for SEO
+### Theme
 
-# Navigation menu configuration (optional)
-VITE_ENABLED_MENUS=Trading,Portfolio,Markets,Leaderboard
-VITE_CUSTOM_MENUS=Documentation,https://docs.yoursite.com;Blog,https://blog.yoursite.com;Support,https://support.yoursite.com
+Colors are CSS custom properties in `app/styles/theme.css`. Edit directly or use the [Storybook theme editor](https://storybook.orderly.network/?path=/story/package-trading-tradingpage--page) to generate values.
+
+### Logos
+
+Place your logos in `public/`:
+- `logo.webp` — primary logo (desktop nav)
+- `logo-secondary.webp` — secondary logo (mobile nav)
+
+Then enable them in `.env`:
+```
+VITE_HAS_PRIMARY_LOGO=true
+VITE_HAS_SECONDARY_LOGO=true
 ```
 
-### 2. Theme Customization
+### Navigation
 
-1. Visit the [Orderly Storybook Trading Page](https://storybook.orderly.network/?path=/story/package-trading-tradingpage--page)
-2. Customize your preferred theme using the controls
-3. Export the generated CSS
-4. Replace the contents of `app/styles/theme.css` with your exported CSS
+Control which pages appear with `VITE_ENABLED_MENUS` and add external links with `VITE_CUSTOM_MENUS`. See `.env` for full details.
 
-### 3. UI Configuration
+## Build & Deploy
 
-Edit `app/utils/config.tsx` to customize your UI:
+### GitHub Pages (default)
 
-- **Footer Links**: Update `footerProps` with your social media links
-- **Logos**: Replace the main and secondary logos in the `appIcons` section
-- **PnL Sharing**: Customize the PnL poster backgrounds and colors in `sharePnLConfig`
+This repo includes a GitHub Actions workflow that auto-deploys on every push to `main` or `master`.
 
-Required assets:
-- Place your logos in the `public` directory:
-  - Main logo: `public/orderly-logo.svg`
-  - Secondary logo: `public/orderly-logo-secondary.svg`
-  - Favicon: `public/favicon.webp`
-- PnL sharing backgrounds: `public/pnl/poster_bg_[1-4].png`
+**Setup (one-time):** Go to repo **Settings > Pages > Source**: select **"GitHub Actions"**
 
-## Development
+That's it. Push to main and it deploys.
 
-Run the development server:
+**Custom domain:** Create a `CNAME` file in the repo root with your domain, then set `VITE_BASE_URL=` (empty) in `.env`.
+
+### Manual / other hosting
 
 ```sh
-yarn dev
+yarn build:spa      # outputs to build/client/
 ```
 
-## Deployment
+For subdirectory deployments, set `VITE_BASE_URL=/repo-name/` in `.env` before building. Serve `build/client/` with any static host, SPA fallback to `index.html`.
 
-1. Build the application:
+## Runtime Config (No Rebuild)
 
-```sh
-yarn build
+You can override any `.env` value at runtime by creating `public/config.js`:
+
+```js
+window.__RUNTIME_CONFIG__ = {
+  VITE_ORDERLY_BROKER_ID: "your_broker_id",
+  VITE_ORDERLY_BROKER_NAME: "Your Brand",
+};
 ```
 
-2. Deploy to Vercel:
-   - Create an account on [Vercel](https://vercel.com) if you haven't already
-   - Install Vercel CLI: `yarn global add vercel`
-   - Run `vercel` in your project directory and follow the prompts
-   - For subsequent deployments, use `vercel --prod` to deploy to production
+## Resources
 
-For custom domain setup:
-   - Go to your project settings in Vercel dashboard
-   - Navigate to the "Domains" section
-   - Add and configure your custom domain
-
-## Additional Resources
-
-- [Orderly JS SDK Documentation](https://github.com/OrderlyNetwork/js-sdk)
-- [Orderly Network Documentation](https://orderly.network/docs/sdks)
+- [Orderly Network Docs](https://orderly.network/docs/sdks)
+- [Orderly JS SDK](https://github.com/OrderlyNetwork/js-sdk)
 - [Storybook Theme Editor](https://storybook.orderly.network/?path=/story/package-trading-tradingpage--page)
-

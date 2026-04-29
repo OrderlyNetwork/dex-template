@@ -92,11 +92,13 @@ window.__RUNTIME_CONFIG__ = {
 
 ### GitHub Pages (default)
 
-This repo includes `.github/workflows/deploy.yml` which auto-deploys to GitHub Pages on every push to `main` or `master`.
+This repo includes `.github/workflows/deploy.yml` which auto-deploys to GitHub Pages on every push to `main` or `master`. The workflow enables Pages automatically on first run — no manual setup needed.
 
-**Setup (one-time):** Go to repo Settings > Pages > Source: select **"GitHub Actions"**
+Just fork, push changes to main, and it deploys. The workflow auto-detects the repo name for the base path. The deployed URL will be:
 
-That's it. The workflow builds and deploys on every push. It auto-detects the repo name for the base path.
+```
+https://<github-username>.github.io/<repo-name>/
+```
 
 ### Custom domain
 

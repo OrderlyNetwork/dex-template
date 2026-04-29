@@ -50,11 +50,13 @@ Control which pages appear with `VITE_ENABLED_MENUS` and add external links with
 
 ### GitHub Pages (default)
 
-This repo includes a GitHub Actions workflow that auto-deploys on every push to `main` or `master`.
+This repo includes a GitHub Actions workflow that auto-deploys on every push to `main` or `master`. It enables Pages automatically on first run — no manual setup needed.
 
-**Setup (one-time):** Go to repo **Settings > Pages > Source**: select **"GitHub Actions"**
+Just fork, push to main, and it deploys. The deployed URL will be:
 
-That's it. Push to main and it deploys.
+```
+https://<github-username>.github.io/<repo-name>/
+```
 
 **Custom domain:** Create a `CNAME` file in the repo root with your domain, then set `VITE_BASE_URL=` (empty) in `.env`.
 

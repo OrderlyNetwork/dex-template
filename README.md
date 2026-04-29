@@ -50,9 +50,28 @@ Control which pages appear with `VITE_ENABLED_MENUS` and add external links with
 
 ### GitHub Pages (default)
 
-This repo includes a GitHub Actions workflow that auto-deploys on every push to `main` or `master`. It enables Pages automatically on first run — no manual setup needed.
+This repo includes a GitHub Actions workflow that auto-deploys on every push to `main` or `master`.
 
-Just fork, push to main, and it deploys. The deployed URL will be:
+**One-time setup after forking** (run from your local clone):
+
+```sh
+REPO="OWNER/REPO"   # e.g. "myuser/my-dex"
+
+# Enable GitHub Actions
+gh api repos/$REPO/actions/permissions -X PUT -f enabled=true -f allowed_actions=all
+
+# Grant workflows write permissions
+gh api repos/$REPO/actions/permissions/workflow -X PUT \
+  -f default_workflow_permissions=write \
+  -F can_approve_pull_request_reviews=true
+
+# Enable GitHub Pages with Actions as deployment source
+gh api repos/$REPO/pages -X POST -f build_type=workflow
+```
+
+If you don't have `gh` CLI available, see [AGENTS.md](./AGENTS.md) for Composio tool equivalents.
+
+That's it. Push to main and it deploys to:
 
 ```
 https://<github-username>.github.io/<repo-name>/

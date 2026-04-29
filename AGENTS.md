@@ -92,17 +92,46 @@ window.__RUNTIME_CONFIG__ = {
 
 ### GitHub Pages (default)
 
-This repo includes `.github/workflows/deploy.yml` which auto-deploys to GitHub Pages on every push to `main` or `master`. The workflow enables Pages automatically on first run — no manual setup needed.
+This repo includes `.github/workflows/deploy.yml` which auto-deploys to GitHub Pages on every push to `main` or `master`.
 
-Just fork, push changes to main, and it deploys. The workflow auto-detects the repo name for the base path. The deployed URL will be:
+**One-time setup after forking** (3 commands, run from your local clone):
+
+```sh
+REPO="OWNER/REPO"   # e.g. "myuser/my-dex"
+
+# 1. Enable GitHub Actions
+gh api repos/$REPO/actions/permissions -X PUT \
+  -f enabled=true -f allowed_actions=all
+
+# 2. Grant workflows write permissions (needed for Pages deploy)
+gh api repos/$REPO/actions/permissions/workflow -X PUT \
+  -f default_workflow_permissions=write \
+  -F can_approve_pull_request_reviews=true
+
+# 3. Enable GitHub Pages with Actions as deployment source
+gh api repos/$REPO/pages -X POST -f build_type=workflow
+```
+
+<details>
+<summary>Using Composio instead of <code>gh</code></summary>
+
+If you don't have `gh` CLI available, use the equivalent Composio tools:
+
+| Step | `gh api` command | Composio tool | Parameters |
+|------|------------------|---------------|------------|
+| 1 | `PUT repos/$REPO/actions/permissions` | `GITHUB_SET_GITHUB_ACTIONS_PERMISSIONS_FOR_A_REPOSITORY` | `owner`, `repo`, `enabled=true`, `allowed_actions="all"` |
+| 2 | `PUT repos/$REPO/actions/permissions/workflow` | `GITHUB_SET_DEFAULT_WORKFLOW_PERMISSIONS_FOR_A_REPOSITORY` | `owner`, `repo`, `default_workflow_permissions="write"`, `can_approve_pull_request_reviews=true` |
+| 3 | `POST repos/$REPO/pages` | `GITHUB_CREATE_OR_UPDATE_GITHUB_PAGES_SITE` | `owner`, `repo`, `build_type="workflow"` |
+
+</details>
+
+After that, every push to main/master builds and deploys automatically. The deployed URL:
 
 ```
 https://<github-username>.github.io/<repo-name>/
 ```
 
-### Custom domain
-
-Create a `CNAME` file in the repo root with your domain, then set `VITE_BASE_URL=` (empty) in `.env` so it builds with root path.
+**Custom domain:** Create a `CNAME` file in the repo root with your domain, then set `VITE_BASE_URL=` (empty) in `.env` so it builds with root path.
 
 ### Manual / other hosting
 

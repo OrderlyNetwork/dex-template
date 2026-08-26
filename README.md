@@ -17,6 +17,8 @@ yarn dev        # http://localhost:5173
 
 **All configuration lives in `.env`.** Open it — every variable has comments explaining what it does, valid values, and defaults. There's no separate config file to hunt for.
 
+For local-only overrides that you don't want to commit, copy `.env.example` to `.env.local` (gitignored) — Vite loads it on top of `.env`.
+
 Key things to set:
 
 | Variable | Purpose |
@@ -25,6 +27,7 @@ Key things to set:
 | `VITE_ORDERLY_BROKER_NAME` | Display name shown throughout the UI |
 | `VITE_APP_NAME` | Browser tab title and PWA name |
 | `VITE_WALLETCONNECT_PROJECT_ID` | Get one at [cloud.walletconnect.com](https://cloud.walletconnect.com) |
+| `VITE_DEPLOYMENT_ENV` | `mainnet` (default) or `testnet` — pins the app to one network and skips the mainnet/testnet toggle |
 
 ### Theme
 
